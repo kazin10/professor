@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Aluno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Container Principal */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+            padding: 2rem 0;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-item:not(.active):hover {
+            background-color: #f0f4f8;
+        }
+        
+        .nav-item.active {
+            background-color: #dbeafe;
+            color: #2563eb;
+            font-weight: bold;
+        }
+        
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: #fff;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .welcome-banner h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Cards */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-warning {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Botões */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #1e293b;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        /* Tabelas */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.5s ease;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1e40af;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Portal do Aluno</div>
+        <div class="user-info">
+            <span>Ana Oliveira</span>
+            <div class="user-avatar">AO</div> 
+        </div>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </li>
+                <li class="nav-item" onclick="showSection('notas')">
+                    <i class="fas fa-clipboard-list"></i> Minhas Notas
+                </li>
+                <li class="nav-item" onclick="showSection('frequencia')">
+                    <i class="fas fa-calendar-check"></i> Minha Frequência
+                </li>
+                <li class="nav-item" onclick="showSection('disciplinas')">
+                    <i class="fas fa-book"></i> Disciplinas
+                </li>
+                <li class="nav-item" onclick="showSection('horarios')">
+                    <i class="fas fa-clock"></i> Horários
+                </li>
+                <li class="nav-item" onclick="showSection('mensagens')">
+                    <i class="fas fa-envelope"></i> Mensagens
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <!-- Seção Dashboard -->
+            <div id="dashboard-section" class="content-section">
+                <div class="welcome-banner">
+                    <h1>Bem-vinda, Ana!</h1>
+                    <p>Acompanhe seu desempenho acadêmico</p>
+                </div>
+                
+                <div class="cards-container">
+                    <!-- Card de Notas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Resumo de Notas</h2>
+                            <span class="badge badge-info">Média: 8.2</span>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Programação Web</strong>
+                                <p>Nota atual: 8.5</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 85%"></div>
+                                </div>
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Banco de Dados</strong>
+                                <p>Nota atual: 7.8</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 78%"></div>
+                                </div>
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                <strong>Matemática</strong>
+                                <p>Nota atual: 8.3</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 83%"></div>
+                                </div>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showSection('notas')">
+                            Ver Todas as Notas
+                        </button>
+                    </div>
+                    
+                    <!-- Card de Frequência -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Minha Frequência</h2>
+                            <span class="badge badge-warning">3 faltas</span>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Programação Web</strong>
+                                <p>Presença: 92%</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 92%"></div>
+                                </div>
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Banco de Dados</strong>
+                                <p>Presença: 85%</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 85%"></div>
+                                </div>
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                <strong>Matemática</strong>
+                                <p>Presença: 95%</p>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 95%"></div>
+                                </div>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showSection('frequencia')">
+                            Ver Detalhes
+                        </button>
+                    </div>
+                    
+                    <!-- Card de Avisos -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Avisos Recentes</h2>
+                        </div>
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Prova de Banco de Dados</strong>
+                            <p>Dia 20/11 às 14h na sala 205</p>
+                            <small style="color: #64748b;">Postado em: 10/11/2023</small>
+                        </div>
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Trabalho de Programação Web</strong>
+                            <p>Prazo final para entrega: 25/11/2023</p>
+                            <small style="color: #64748b;">Postado em: 05/11/2023</small>
+                        </div>
+                        <div style="padding: 0.5rem 0;">
+                            <strong>Recesso Acadêmico</strong>
+                            <p>Dias 30/11 e 01/12 - não haverá aula</p>
+                            <small style="color: #64748b;">Postado em: 01/11/2023</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Ações Rápidas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Ações Rápidas</h2>
+                        </div>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="openModal('justificar-falta-modal')">
+                            <i class="fas fa-file-alt"></i> Justificar Falta
+                        </button>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="showSection('mensagens')">
+                            <i class="fas fa-envelope"></i> Enviar Mensagem
+                        </button>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="showSection('horarios')">
+                            <i class="fas fa-calendar-alt"></i> Ver Horários
+                        </button>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openModal('material-modal')">
+                            <i class="fas fa-download"></i> Baixar Material
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Notas -->
+            <div id="notas-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Minhas Notas</h2>
+                        <button class="btn btn-primary" onclick="openModal('boletim-modal')">
+                            <i class="fas fa-print"></i> Imprimir Boletim
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecione a Disciplina:</label>
+                        <select class="form-select" id="disciplina-notas">
+                            <option value="">-- Todas --</option>
+                            <option value="pw">Programação Web</option>
+                            <option value="bd">Banco de Dados</option>
+                            <option value="mat">Matemática</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Atividade</th>
+                                    <th>Nota</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Programação Web</td>
+                                    <td>Prova Bimestral 1</td>
+                                    <td>8.5</td>
+                                    <td>15/10/2023</td>
+                                    <td><span class="badge badge-success">Aprovado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Banco de Dados</td>
+                                    <td>Trabalho Prático</td>
+                                    <td>7.8</td>
+                                    <td>20/10/2023</td>
+                                    <td><span class="badge badge-success">Aprovado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Matemática</td>
+                                    <td>Atividade 3</td>
+                                    <td>6.5</td>
+                                    <td>05/11/2023</td>
+                                    <td><span class="badge badge-warning">Recuperação</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Programação Web</td>
+                                    <td>Projeto Final</td>
+                                    <td>-</td>
+                                    <td>25/11/2023</td>
+                                    <td><span class="badge badge-info">Pendente</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card de Médias -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">Médias por Disciplina</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Média Atual</th>
+                                    <th>Faltas</th>
+                                    <th>Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Programação Web</td>
+                                    <td>8.5</td>
+                                    <td>1</td>
+                                    <td><span class="badge badge-success">Aprovado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Banco de Dados</td>
+                                    <td>7.8</td>
+                                    <td>3</td>
+                                    <td><span class="badge badge-success">Aprovado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Matemática</td>
+                                    <td>6.2</td>
+                                    <td>0</td>
+                                    <td><span class="badge badge-warning">Recuperação</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Frequência -->
+            <div id="frequencia-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Minha Frequência</h2>
+                        <button class="btn btn-primary" onclick="openModal('justificar-falta-modal')">
+                            <i class="fas fa-file-alt"></i> Justificar Falta
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecione a Disciplina:</label>
+                        <select class="form-select" id="disciplina-frequencia">
+                            <option value="">-- Todas --</option>
+                            <option value="pw">Programação Web</option>
+                            <option value="bd">Banco de Dados</option>
+                            <option value="mat">Matemática</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Disciplina</th>
+                                    <th>Status</th>
+                                    <th>Justificativa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10/10/2023</td>
+                                    <td>Banco de Dados</td>
+                                    <td><span class="badge badge-danger">Falta</span></td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>15/10/2023</td>
+                                    <td>Programação Web</td>
+                                    <td><span class="badge badge-success">Presente</span></td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>20/10/2023</td>
+                                    <td>Banco de Dados</td>
+                                    <td><span class="badge badge-danger">Falta</span></td>
+                                    <td>Atestado médico</td>
+                                </tr>
+                                <tr>
+                                    <td>25/10/2023</td>
+                                    <td>Matemática</td>
+                                    <td><span class="badge badge-success">Presente</span></td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>05/11/2023</td>
+                                    <td>Banco de Dados</td>
+                                    <td><span class="badge badge-danger">Falta</span></td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card de Resumo de Frequência -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">Resumo de Frequência</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Aulas Totais</th>
+                                    <th>Presenças</th>
+                                    <th>Faltas</th>
+                                    <th>Percentual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Programação Web</td>
+                                    <td>20</td>
+                                    <td>19</td>
+                                    <td>1</td>
+                                    <td>95%</td>
+                                </tr>
+                                <tr>
+                                    <td>Banco de Dados</td>
+                                    <td>20</td>
+                                    <td>17</td>
+                                    <td>3</td>
+                                    <td>85%</td>
+                                </tr>
+                                <tr>
+                                    <td>Matemática</td>
+                                    <td>20</td>
+                                    <td>20</td>
+                                    <td>0</td>
+                                    <td>100%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Disciplinas -->
+            <div id="disciplinas-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Minhas Disciplinas</h2>
+                    </div>
+                    <div class="cards-container">
+                        <!-- Card Disciplina 1 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Programação Web</h2>
+                                <span class="badge badge-success">Ativa</span>
+                            </div>
+                            <p><strong>Professor:</strong> Carlos Silva</p>
+                            <p><strong>Horário:</strong> Segunda e Quarta, 14h-16h</p>
+                            <p><strong>Sala:</strong> 205</p>
+                            <p><strong>Média Atual:</strong> 8.5</p>
+                            <div style="margin-top: 1rem;">
+                                <button class="btn btn-primary" style="width: 100%;" onclick="openModal('material-modal')">
+                                    <i class="fas fa-download"></i> Materiais
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Disciplina 2 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Banco de Dados</h2>
+                                <span class="badge badge-success">Ativa</span>
+                            </div>
+                            <p><strong>Professor:</strong> Maria Santos</p>
+                            <p><strong>Horário:</strong> Terça e Quinta, 10h-12h</p>
+                            <p><strong>Sala:</strong> 301</p>
+                            <p><strong>Média Atual:</strong> 7.8</p>
+                            <div style="margin-top: 1rem;">
+                                <button class="btn btn-primary" style="width: 100%;" onclick="openModal('material-modal')">
+                                    <i class="fas fa-download"></i> Materiais
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Disciplina 3 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Matemática</h2>
+                                <span class="badge badge-success">Ativa</span>
+                            </div>
+                            <p><strong>Professor:</strong> João Pereira</p>
+                            <p><strong>Horário:</strong> Sexta, 8h-12h</p>
+                            <p><strong>Sala:</strong> 102</p>
+                            <p><strong>Média Atual:</strong> 6.2</p>
+                            <div style="margin-top: 1rem;">
+                                <button class="btn btn-primary" style="width: 100%;" onclick="openModal('material-modal')">
+                                    <i class="fas fa-download"></i> Materiais
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Horários -->
+            <div id="horarios-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Meu Horário</h2>
+                        <button class="btn btn-primary" onclick="openModal('calendario-modal')">
+                            <i class="fas fa-calendar"></i> Calendário
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Horário</th>
+                                    <th>Segunda</th>
+                                    <th>Terça</th>
+                                    <th>Quarta</th>
+                                    <th>Quinta</th>
+                                    <th>Sexta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>08:00 - 10:00</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Matemática (Sala 102)</td>
+                                </tr>
+                                <tr>
+                                    <td>10:00 - 12:00</td>
+                                    <td></td>
+                                    <td>Banco de Dados (Sala 301)</td>
+                                    <td></td>
+                                    <td>Banco de Dados (Sala 301)</td>
+                                    <td>Matemática (Sala 102)</td>
+                                </tr>
+                                <tr>
+                                    <td>14:00 - 16:00</td>
+                                    <td>Programação Web (Sala 205)</td>
+                                    <td></td>
+                                    <td>Programação Web (Sala 205)</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card de Próximas Aulas -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">Próximas Aulas</h2>
+                    </div>
+                    <ul style="list-style: none;">
+                        <li style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Programação Web</strong>
+                            <p>Amanhã, 14h - Sala 205</p>
+                            <p><strong>Tópico:</strong> Introdução a JavaScript</p>
+                        </li>
+                        <li style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Banco de Dados</strong>
+                            <p>Terça-feira, 10h - Sala 301</p>
+                            <p><strong>Tópico:</strong> Modelagem de Dados</p>
+                        </li>
+                        <li style="padding: 1rem 0;">
+                            <strong>Matemática</strong>
+                            <p>Sexta-feira, 8h - Sala 102</p>
+                            <p><strong>Tópico:</strong> Funções Trigonométricas</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Seção Mensagens -->
+            <div id="mensagens-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Mensagens</h2>
+                        <button class="btn btn-primary" onclick="openModal('nova-mensagem-modal')">
+                            <i class="fas fa-plus"></i> Nova Mensagem
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Remetente</th>
+                                    <th>Assunto</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prof. Carlos Silva</td>
+                                    <td>Correção do Trabalho</td>
+                                    <td>10/11/2023</td>
+                                    <td>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Coordenação</td>
+                                    <td>Recesso Acadêmico</td>
+                                    <td>05/11/2023</td>
+                                    <td>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Prof. Maria Santos</td>
+                                    <td>Prova Remarcada</td>
+                                    <td>01/11/2023</td>
+                                    <td>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Card de Mensagem em Destaque -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">Mensagem Recente</h2>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <p><strong>De:</strong> Prof. Carlos Silva</p>
+                        <p><strong>Assunto:</strong> Correção do Trabalho</p>
+                        <p><strong>Data:</strong> 10/11/2023</p>
+                        <div style="margin-top: 1rem; padding: 1rem; background-color: #f8fafc; border-radius: 4px;">
+                            <p>Olá Ana,</p>
+                            <p>Seu trabalho foi corrigido e já está disponível para visualização no sistema. Você obteve nota 8,5. Parabéns pelo bom trabalho!</p>
+                            <p>Att,</p>
+                            <p>Prof. Carlos</p>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-reply"></i> Responder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Justificar Falta -->
+    <div id="justificar-falta-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Justificar Falta</h3>
+                <button class="modal-close" onclick="closeModal('justificar-falta-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione a Disciplina:</label>
+                <select class="form-control" id="disciplina-falta">
+                    <option value="">-- Selecione --</option>
+                    <option value="pw">Programação Web</option>
+                    <option value="bd">Banco de Dados</option>
+                    <option value="mat">Matemática</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data da Falta:</label>
+                <input type="date" class="form-control" id="data-falta">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tipo de Justificativa:</label>
+                <select class="form-control" id="tipo-justificativa">
+                    <option value="">-- Selecione --</option>
+                    <option value="medico">Atestado Médico</option>
+                    <option value="pessoal">Motivo Pessoal</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descrição:</label>
+                <textarea class="form-control" id="descricao-justificativa" rows="3" placeholder="Descreva o motivo da falta..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Anexar Comprovante (opcional):</label>
+                <input type="file" class="form-control" id="anexo-justificativa">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('justificar-falta-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="enviarJustificativa()">Enviar Justificativa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Baixar Material -->
+    <div id="material-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Materiais da Disciplina</h3>
+                <button class="modal-close" onclick="closeModal('material-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione a Disciplina:</label>
+                <select class="form-control" id="disciplina-material">
+                    <option value="">-- Selecione --</option>
+                    <option value="pw">Programação Web</option>
+                    <option value="bd">Banco de Dados</option>
+                    <option value="mat">Matemática</option>
+                </select>
+            </div>
+            <div class="table-responsive" style="margin-top: 1rem;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Data</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Aula 1 - Introdução</td>
+                            <td>05/10/2023</td>
+                            <td>
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-download"></i> Baixar
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exercícios Resolvidos</td>
+                            <td>10/10/2023</td>
+                            <td>
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-download"></i> Baixar
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Slides Aula 2</td>
+                            <td>15/10/2023</td>
+                            <td>
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-download"></i> Baixar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('material-modal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova Mensagem -->
+    <div id="nova-mensagem-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Nova Mensagem</h3>
+                <button class="modal-close" onclick="closeModal('nova-mensagem-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Para:</label>
+                <select class="form-control" id="destinatario-mensagem">
+                    <option value="">-- Selecione --</option>
+                    <option value="prof1">Prof. Carlos Silva</option>
+                    <option value="prof2">Prof. Maria Santos</option>
+                    <option value="prof3">Prof. João Pereira</option>
+                    <option value="coordenacao">Coordenação</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Assunto:</label>
+                <input type="text" class="form-control" id="assunto-mensagem" placeholder="Digite o assunto...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mensagem:</label>
+                <textarea class="form-control" id="texto-mensagem" rows="5" placeholder="Digite sua mensagem..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Anexar Arquivo (opcional):</label>
+                <input type="file" class="form-control" id="anexo-mensagem">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('nova-mensagem-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="enviarMensagem()">Enviar Mensagem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Imprimir Boletim -->
+    <div id="boletim-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Imprimir Boletim</h3>
+                <button class="modal-close" onclick="closeModal('boletim-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione o Bimestre:</label>
+                <select class="form-control" id="bimestre-boletim">
+                    <option value="1">1º Bimestre</option>
+                    <option value="2">2º Bimestre</option>
+                    <option value="3">3º Bimestre</option>
+                    <option value="4">4º Bimestre</option>
+                    <option value="final">Final</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Formato:</label>
+                <select class="form-control" id="formato-boletim">
+                    <option value="pdf">PDF</option>
+                    <option value="html">HTML</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('boletim-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="gerarBoletim()">Gerar Boletim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Calendário -->
+    <div id="calendario-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Calendário Acadêmico</h3>
+                <button class="modal-close" onclick="closeModal('calendario-modal')">&times;</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <!-- Mês 1 -->
+                <div>
+                    <h4 style="text-align: center; margin-bottom: 0.5rem;">Novembro 2023</h4>
+                    <table class="table" style="font-size: 0.8rem;">
+                        <thead>
+                            <tr>
+                                <th>D</th>
+                                <th>S</th>
+                                <th>T</th>
+                                <th>Q</th>
+                                <th>Q</th>
+                                <th>S</th>
+                                <th>S</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td>9</td>
+                                <td>10</td>
+                                <td>11</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>13</td>
+                                <td>14</td>
+                                <td>15</td>
+                                <td>16</td>
+                                <td>17</td>
+                                <td>18</td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td>20</td>
+                                <td>21</td>
+                                <td>22</td>
+                                <td>23</td>
+                                <td>24</td>
+                                <td>25</td>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td>27</td>
+                                <td>28</td>
+                                <td>29</td>
+                                <td>30</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem;">
+                        <p><strong>20/11:</strong> Prova BD</p>
+                        <p><strong>25/11:</strong> Entrega Trabalho PW</p>
+                        <p><strong>30/11:</strong> Recesso</p>
+                    </div>
+                </div>
+                
+                <!-- Mês 2 -->
+                <div>
+                    <h4 style="text-align: center; margin-bottom: 0.5rem;">Dezembro 2023</h4>
+                    <table class="table" style="font-size: 0.8rem;">
+                        <thead>
+                            <tr>
+                                <th>D</th>
+                                <th>S</th>
+                                <th>T</th>
+                                <th>Q</th>
+                                <th>Q</th>
+                                <th>S</th>
+                                <th>S</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>1</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>11</td>
+                                <td>12</td>
+                                <td>13</td>
+                                <td>14</td>
+                                <td>15</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>18</td>
+                                <td>19</td>
+                                <td>20</td>
+                                <td>21</td>
+                                <td>22</td>
+                                <td>23</td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>25</td>
+                                <td>26</td>
+                                <td>27</td>
+                                <td>28</td>
+                                <td>29</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>31</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem;">
+                        <p><strong>01/12:</strong> Recesso</p>
+                        <p><strong>15/12:</strong> Prova Final</p>
+                        <p><strong>20/12:</strong> Resultados</p>
+                    </div>
+                </div>
+                
+                <!-- Mês 3 -->
+                <div>
+                    <h4 style="text-align: center; margin-bottom: 0.5rem;">Janeiro 2024</h4>
+                    <table class="table" style="font-size: 0.8rem;">
+                        <thead>
+                            <tr>
+                                <th>D</th>
+                                <th>S</th>
+                                <th>T</th>
+                                <th>Q</th>
+                                <th>Q</th>
+                                <th>S</th>
+                                <th>S</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>8</td>
+                                <td>9</td>
+                                <td>10</td>
+                                <td>11</td>
+                                <td>12</td>
+                                <td>13</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>15</td>
+                                <td>16</td>
+                                <td>17</td>
+                                <td>18</td>
+                                <td>19</td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td>22</td>
+                                <td>23</td>
+                                <td>24</td>
+                                <td>25</td>
+                                <td>26</td>
+                                <td>27</td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td>29</td>
+                                <td>30</td>
+                                <td>31</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem;">
+                        <p><strong>10/01:</strong> Início Férias</p>
+                        <p><strong>25/01:</strong> Matrículas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('calendario-modal')">Fechar</button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Portal do Aluno - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Funções para controlar as seções
+        function showSection(sectionId) {
+            // Esconde todas as seções
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Mostra a seção selecionada
+            document.getElementById(sectionId + '-section').style.display = 'block';
+            
+            // Atualiza o menu ativo
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Encontra o item do menu correspondente e marca como ativo
+            const menuItems = document.querySelectorAll('.nav-item');
+            for (let i = 0; i < menuItems.length; i++) {
+                if (menuItems[i].getAttribute('onclick').includes(sectionId)) {
+                    menuItems[i].classList.add('active');
+                    break;
+                }
+            }
+        }
+
+        // Funções para controlar os modais
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Funções para salvar dados (simuladas)
+        function enviarJustificativa() {
+            alert('Justificativa enviada com sucesso!');
+            closeModal('justificar-falta-modal');
+        }
+
+        function enviarMensagem() {
+            alert('Mensagem enviada com sucesso!');
+            closeModal('nova-mensagem-modal');
+        }
+
+        function gerarBoletim() {
+            alert('Boletim gerado com sucesso!');
+            closeModal('boletim-modal');
+        }
+
+        // Fecha o modal se clicar fora do conteúdo
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
