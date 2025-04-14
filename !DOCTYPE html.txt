@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Professor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Container Principal */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+            padding: 2rem 0;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-item:not(.active):hover {
+            background-color: #f0f4f8;
+        }
+        
+        .nav-item.active {
+            background-color: #dbeafe;
+            color: #2563eb;
+            font-weight: bold;
+        }
+        
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background-color: #fff;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .welcome-banner h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Cards */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-warning {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+        
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Botões */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #1e293b;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        /* Tabelas */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .table th, .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1e40af;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Portal do Professor</div>
+        <div class="user-info">
+            <span>Prof. Carlos Silva</span>
+            <div class="user-avatar">CS</div> 
+        </div>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </li>
+                <li class="nav-item" onclick="showSection('turmas')">
+                    <i class="fas fa-users"></i> Minhas Turmas
+                </li>
+                <li class="nav-item" onclick="showSection('notas')">
+                    <i class="fas fa-clipboard-list"></i> Lançar Notas
+                </li>
+                <li class="nav-item" onclick="showSection('frequencia')">
+                    <i class="fas fa-calendar-check"></i> Registrar Frequência
+                </li>
+                <li class="nav-item" onclick="showSection('observacoes')">
+                    <i class="fas fa-comment-alt"></i> Observações
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </li>
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <!-- Seção Dashboard -->
+            <div id="dashboard-section" class="content-section">
+                <div class="welcome-banner">
+                    <h1>Bem-vindo, Professor Carlos!</h1>
+                    <p>Gerencie as informações acadêmicas dos seus alunos</p>
+                </div>
+                
+                <div class="cards-container">
+                    <!-- Card de Turmas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Minhas Turmas</h2>
+                            <span class="badge badge-success">3 ativas</span>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>PDM - 3º Ano</strong>
+                                <p>30 alunos matriculados</p>
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Banco de Dados - 2º Ano</strong>
+                                <p>25 alunos matriculados</p>
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                <strong>Métodos de Pesquisa - 4º Ano</strong>
+                                <p>20 alunos matriculados</p>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showSection('turmas')">
+                            Ver Todas as Turmas
+                        </button>
+                    </div>
+                    
+                    <!-- Card de Atividades Pendentes -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Atividades Pendentes</h2>
+                            <span class="badge badge-warning">5 para corrigir</span>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Trabalho PDM - 3º Ano</strong>
+                                <p>15/20 entregues</p>
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>Prova Banco de Dados - 2º Ano</strong>
+                                <p>10/25 entregues</p>
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                <strong>Seminário Métodos - 4º Ano</strong>
+                                <p>5/20 entregues</p>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;">
+                            Corrigir Atividades
+                        </button>
+                    </div>
+                    
+                    <!-- Card de Avisos -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Avisos Recentes</h2>
+                        </div>
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Reunião Pedagógica</strong>
+                            <p>Dia 20/11 às 14h na sala dos professores</p>
+                            <small style="color: #64748b;">Postado em: 10/11/2023</small>
+                        </div>
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                            <strong>Entrega de Diários</strong>
+                            <p>Prazo final para entrega: 25/11/2023</p>
+                            <small style="color: #64748b;">Postado em: 05/11/2023</small>
+                        </div>
+                        <div style="padding: 0.5rem 0;">
+                            <strong>Capacitação Docente</strong>
+                            <p>Inscrições abertas para curso de atualização</p>
+                            <small style="color: #64748b;">Postado em: 01/11/2023</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Card de Ações Rápidas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Ações Rápidas</h2>
+                        </div>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="openModal('nota-modal')">
+                            <i class="fas fa-plus"></i> Adicionar Nota
+                        </button>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="openModal('frequencia-modal')">
+                            <i class="fas fa-calendar-alt"></i> Registrar Falta
+                        </button>
+                        <button class="btn btn-primary" style="margin-bottom: 0.5rem; width: 100%;" onclick="openModal('observacao-modal')">
+                            <i class="fas fa-comment-alt"></i> Adicionar Observação
+                        </button>
+                        <button class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-envelope"></i> Enviar Mensagem
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Turmas -->
+            <div id="turmas-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Minhas Turmas</h2>
+                        <button class="btn btn-primary" onclick="openModal('nova-turma-modal')">
+                            <i class="fas fa-plus"></i> Nova Turma
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Turma</th>
+                                    <th>Disciplina</th>
+                                    <th>Quantidade de Alunos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>3º Ano A</td>
+                                    <td>PDM</td>
+                                    <td>30</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="verTurma('3A-PDM')">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2º Ano B</td>
+                                    <td>Banco de Dados</td>
+                                    <td>25</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="verTurma('2B-BD')">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4º Ano A</td>
+                                    <td>Métodos de Pesquisa</td>
+                                    <td>20</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="verTurma('4A-MP')">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Lançar Notas -->
+            <div id="notas-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Lançar Notas</h2>
+                        <button class="btn btn-primary" onclick="openModal('nota-modal')">
+                            <i class="fas fa-plus"></i> Nova Nota
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecione a Turma:</label>
+                        <select class="form-select" id="turma-notas">
+                            <option value="">-- Selecione --</option>
+                            <option value="3A-PDM">3º Ano A - PDM</option>
+                            <option value="2B-BD">2º Ano B - Banco de Dados</option>
+                            <option value="4A-MP">4º Ano A - Métodos de Pesquisa</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Atividade 1</th>
+                                    <th>Atividade 2</th>
+                                    <th>Prova</th>
+                                    <th>Média</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>João Silva</td>
+                                    <td>8.5</td>
+                                    <td>7.0</td>
+                                    <td>9.0</td>
+                                    <td>8.2</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="editarNota('1')">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Oliveira</td>
+                                    <td>6.0</td>
+                                    <td>7.5</td>
+                                    <td>8.0</td>
+                                    <td>7.2</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="editarNota('2')">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Frequência -->
+            <div id="frequencia-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Registrar Frequência</h2>
+                        <button class="btn btn-primary" onclick="openModal('frequencia-modal')">
+                            <i class="fas fa-plus"></i> Nova Falta
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecione a Turma:</label>
+                        <select class="form-select" id="turma-frequencia">
+                            <option value="">-- Selecione --</option>
+                            <option value="3A-PDM">3º Ano A - PDM</option>
+                            <option value="2B-BD">2º Ano B - Banco de Dados</option>
+                            <option value="4A-MP">4º Ano A - Métodos de Pesquisa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecione a Data:</label>
+                        <input type="date" class="form-control" id="data-frequencia">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Presença</th>
+                                    <th>Total Faltas</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>João Silva</td>
+                                    <td>
+                                        <input type="checkbox" checked>
+                                    </td>
+                                    <td>2</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="verFrequencia('1')">
+                                            <i class="fas fa-eye"></i> Histórico
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Oliveira</td>
+                                    <td>
+                                        <input type="checkbox">
+                                    </td>
+                                    <td>5</td>
+                                    <td>
+                                        <button class="btn btn-secondary" onclick="verFrequencia('2')">
+                                            <i class="fas fa-eye"></i> Histórico
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar Frequência
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Observações -->
+            <div id="observacoes-section" class="content-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Observações</h2>
+                        <button class="btn btn-primary" onclick="openModal('observacao-modal')">
+                            <i class="fas fa-plus"></i> Nova Observação
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Filtrar por:</label>
+                        <select class="form-select" id="filtro-observacoes">
+                            <option value="">-- Todas --</option>
+                            <option value="aluno">Aluno Específico</option>
+                            <option value="turma">Turma Inteira</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Aluno/Turma</th>
+                                    <th>Observação</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10/11/2023</td>
+                                    <td>João Silva</td>
+                                    <td>Precisa melhorar participação nas aulas</td>
+                                    <td>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>05/11/2023</td>
+                                    <td>3º Ano A</td>
+                                    <td>Turma com bom desempenho no trabalho em grupo</td>
+                                    <td>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Adicionar Nota -->
+    <div id="nota-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar Nota</h3>
+                <button class="modal-close" onclick="closeModal('nota-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione a Turma:</label>
+                <select class="form-control" id="turma-nota">
+                    <option value="">-- Selecione --</option>
+                    <option value="3A-PDM">3º Ano A - PDM</option>
+                    <option value="2B-BD">2º Ano B - Banco de Dados</option>
+                    <option value="4A-MP">4º Ano A - Métodos de Pesquisa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione o Aluno (ou deixe em branco para turma inteira):</label>
+                <select class="form-control" id="aluno-nota">
+                    <option value="">-- Todos os Alunos --</option>
+                    <option value="1">João Silva</option>
+                    <option value="2">Maria Oliveira</option>
+                    <option value="3">Carlos Souza</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tipo de Avaliação:</label>
+                <select class="form-control" id="tipo-avaliacao">
+                    <option value="atividade">Atividade</option>
+                    <option value="prova">Prova</option>
+                    <option value="trabalho">Trabalho</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nome da Avaliação:</label>
+                <input type="text" class="form-control" id="nome-avaliacao" placeholder="Ex: Prova Bimestral 1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nota:</label>
+                <input type="number" step="0.1" min="0" max="10" class="form-control" id="valor-nota" placeholder="0.0 a 10.0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data:</label>
+                <input type="date" class="form-control" id="data-nota">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('nota-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarNota()">Salvar Nota</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Registrar Falta -->
+    <div id="frequencia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Falta</h3>
+                <button class="modal-close" onclick="closeModal('frequencia-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione a Turma:</label>
+                <select class="form-control" id="turma-falta">
+                    <option value="">-- Selecione --</option>
+                    <option value="3A-PDM">3º Ano A - PDM</option>
+                    <option value="2B-BD">2º Ano B - Banco de Dados</option>
+                    <option value="4A-MP">4º Ano A - Métodos de Pesquisa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione o Aluno (ou deixe em branco para turma inteira):</label>
+                <select class="form-control" id="aluno-falta">
+                    <option value="">-- Todos os Alunos --</option>
+                    <option value="1">João Silva</option>
+                    <option value="2">Maria Oliveira</option>
+                    <option value="3">Carlos Souza</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data:</label>
+                <input type="date" class="form-control" id="data-falta">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Justificativa (opcional):</label>
+                <textarea class="form-control" id="justificativa-falta" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('frequencia-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarFalta()">Registrar Falta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Observação -->
+    <div id="observacao-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar Observação</h3>
+                <button class="modal-close" onclick="closeModal('observacao-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione a Turma:</label>
+                <select class="form-control" id="turma-observacao">
+                    <option value="">-- Selecione --</option>
+                    <option value="3A-PDM">3º Ano A - PDM</option>
+                    <option value="2B-BD">2º Ano B - Banco de Dados</option>
+                    <option value="4A-MP">4º Ano A - Métodos de Pesquisa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Selecione o Aluno (ou deixe em branco para turma inteira):</label>
+                <select class="form-control" id="aluno-observacao">
+                    <option value="">-- Todos os Alunos --</option>
+                    <option value="1">João Silva</option>
+                    <option value="2">Maria Oliveira</option>
+                    <option value="3">Carlos Souza</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Observação:</label>
+                <textarea class="form-control" id="texto-observacao" rows="5" placeholder="Digite sua observação..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Data:</label>
+                <input type="date" class="form-control" id="data-observacao">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('observacao-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarObservacao()">Salvar Observação</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Portal do Professor - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Funções para controlar as seções
+        function showSection(sectionId) {
+            // Esconde todas as seções
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Mostra a seção selecionada
+            document.getElementById(sectionId + '-section').style.display = 'block';
+            
+            // Atualiza o menu ativo
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Encontra o item do menu correspondente e marca como ativo
+            const menuItems = document.querySelectorAll('.nav-item');
+            for (let i = 0; i < menuItems.length; i++) {
+                if (menuItems[i].getAttribute('onclick').includes(sectionId)) {
+                    menuItems[i].classList.add('active');
+                    break;
+                }
+            }
+        }
+
+        // Funções para controlar os modais
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Funções para salvar dados (simuladas)
+        function salvarNota() {
+            alert('Nota salva com sucesso!');
+            closeModal('nota-modal');
+        }
+
+        function salvarFalta() {
+            alert('Falta registrada com sucesso!');
+            closeModal('frequencia-modal');
+        }
+
+        function salvarObservacao() {
+            alert('Observação salva com sucesso!');
+            closeModal('observacao-modal');
+        }
+
+        // Funções auxiliares
+        function verTurma(turmaId) {
+            alert('Visualizando turma: ' + turmaId);
+            // Aqui você poderia carregar os detalhes da turma
+        }
+
+        function editarNota(alunoId) {
+            alert('Editando nota do aluno ID: ' + alunoId);
+            openModal('nota-modal');
+        }
+
+        function verFrequencia(alunoId) {
+            alert('Visualizando frequência do aluno ID: ' + alunoId);
+        }
+
+        // Fecha o modal se clicar fora do conteúdo
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
